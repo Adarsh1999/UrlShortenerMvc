@@ -1,0 +1,25 @@
+// This file will be moved to Views/Shared/Components/ShortUrlSidebar/Default.cshtml for ViewComponent usage.
+
+@model IEnumerable<UrlShortenerMvc.Models.ShortUrl>
+
+<div class="sidebar-list p-2" style="max-height: 80vh; overflow-y: auto;">
+    <h6 class="text-secondary mb-3">Your Short URLs</h6>
+    @if (!Model.Any())
+    {
+        <div class="text-muted small">No short URLs created yet.</div>
+    }
+    else
+    {
+        <ul class="list-group list-group-flush">
+            @foreach (var url in Model)
+            {
+                <li class="list-group-item px-0 py-1 border-0">
+                    <a href="@Url.Action("Stats", "ShortUrls", new { code = url.ShortCode })" class="d-block text-truncate" title="@url.OriginalUrl">
+                        <span class="fw-bold">@url.ShortCode</span>
+                        <span class="text-muted small ms-2">@url.OriginalUrl</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+</div> 

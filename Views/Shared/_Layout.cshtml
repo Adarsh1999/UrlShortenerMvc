@@ -28,10 +28,15 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="d-flex" style="min-height: 90vh;">
+        <aside class="bg-light border-end" style="width: 320px; min-width: 220px; max-width: 100vw;">
+            @await Component.InvokeAsync("ShortUrlSidebar")
+        </aside>
+        <div class="flex-grow-1 container-fluid px-4">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
     <footer class="border-top footer text-muted">

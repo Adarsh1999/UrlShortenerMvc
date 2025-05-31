@@ -1,0 +1,39 @@
+@model IEnumerable<UrlShortenerMvc.Models.ShortUrl>
+
+<div class="sidebar-list">
+    <div class="card shadow-sm border-0 mb-2">
+        <div class="card-body p-3">
+            <h6 class="text-secondary mb-3">Your Short URLs</h6>
+            @if (!Model.Any())
+            {
+                <div class="text-muted small">No short URLs created yet.</div>
+            }
+            else
+            {
+                <ul class="list-unstyled mb-0">
+                    @foreach (var url in Model)
+                    {
+                        <li class="mb-2">
+                            <a href="@Url.Action("Stats", "ShortUrls", new { code = url.ShortCode })" class="d-flex align-items-center sidebar-link" title="@url.OriginalUrl" style="text-decoration: none;">
+                                <span class="badge bg-primary me-2" style="font-size: 1em; min-width: 3.5em;">@url.ShortCode</span>
+                                <span class="text-truncate text-dark small" style="max-width: 170px;">@url.OriginalUrl</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+.sidebar-list {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+.sidebar-link:hover {
+    background: #f0f4ff;
+    border-radius: 6px;
+    text-decoration: none;
+}
+</style> 
