@@ -1,0 +1,42 @@
+@model UrlShortenerMvc.ViewModels.CreateUrlViewModel
+
+@{
+    ViewData["Title"] = "Create Short URL";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">Create Short URL</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Url" class="form-label">Enter URL to shorten</label>
+                            <input asp-for="Url" class="form-control" placeholder="https://example.com/very/long/url" />
+                            <span asp-validation-for="Url" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ExpiresAt" class="form-label">Expiry Date (Optional)</label>
+                            <input asp-for="ExpiresAt" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="ExpiresAt" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Shorten URL</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

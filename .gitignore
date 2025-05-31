@@ -1,0 +1,74 @@
+# .NET build folders
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+*.sln.iml
+
+# ASP.NET Secrets
+secrets.json
+/appsettings.Development.json
+
+# Logs
+*.log
+logs/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Publish output
+publish/
+
+# npm & LibMan
+node_modules/
+libman.json
+wwwroot/lib/
+
+# Docker
+*.pid
+
+# Test results
+TestResults/
+
+# Database
+*.db
+*.sqlite
+
+# Others
+.env
+.env.*
+
+# Backup & temp
+*.bak
+*.tmp
+~$*
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# JetBrains Rider
+.idea/
+.idea/*
+
+# Local tools
+.localtoolstarget
+
+# Coverage
+coverage/
+*.coverage
+*.coverageinfo
+
+# EF Core Migrations snapshots
+Migrations/*Snapshot.cs 
