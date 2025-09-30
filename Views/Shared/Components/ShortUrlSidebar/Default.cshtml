@@ -1,39 +1,123 @@
 @model IEnumerable<UrlShortenerMvc.Models.ShortUrl>
 
-<div class="sidebar-list">
-    <div class="card shadow-sm border-0 mb-2">
-        <div class="card-body p-3">
-            <h6 class="text-secondary mb-3">Your Short URLs</h6>
-            @if (!Model.Any())
+<div class="sidebar-list p-3" style="max-height: 85vh; overflow-y: auto;">
+    <h6 class="text-white mb-4" style="font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;">
+        <i class="fas fa-link me-2"></i>Your Short URLs
+    </h6>
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-inbox fa-3x mb-3" style="color: rgba(255,255,255,0.3);"></i>
+            <p class="text-white-50 small mb-0">No short URLs created yet.</p>
+            <small style="color: rgba(255,255,255,0.5);">Create one to get started!</small>
+        </div>
+    }
+    else
+    {
+        <div class="sidebar-urls">
+            @foreach (var url in Model)
             {
-                <div class="text-muted small">No short URLs created yet.</div>
-            }
-            else
-            {
-                <ul class="list-unstyled mb-0">
-                    @foreach (var url in Model)
+                <a href="@Url.Action("Stats", "ShortUrls", new { code = url.ShortCode })" 
+                   class="sidebar-url-item" 
+                   title="@url.OriginalUrl">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="short-code-badge">@url.ShortCode</span>
+                        <small class="click-count">
+                            <i class="fas fa-mouse-pointer me-1"></i>@url.Clicks.Count
+                        </small>
+                    </div>
+                    <div class="url-text">
+                        @url.OriginalUrl
+                    </div>
+                    @if (url.ExpiresAt.HasValue)
                     {
-                        <li class="mb-2">
-                            <a href="@Url.Action("Stats", "ShortUrls", new { code = url.ShortCode })" class="d-flex align-items-center sidebar-link" title="@url.OriginalUrl" style="text-decoration: none;">
-                                <span class="badge bg-primary me-2" style="font-size: 1em; min-width: 3.5em;">@url.ShortCode</span>
-                                <span class="text-truncate text-dark small" style="max-width: 170px;">@url.OriginalUrl</span>
-                            </a>
-                        </li>
+                        <div class="expiry-text">
+                            <i class="fas fa-clock me-1"></i>Expires @url.ExpiresAt.Value.ToString("MM/dd/yy")
+                        </div>
                     }
-                </ul>
+                </a>
             }
         </div>
-    </div>
+    }
 </div>
 
 <style>
-.sidebar-list {
-    max-height: 80vh;
-    overflow-y: auto;
-}
-.sidebar-link:hover {
-    background: #f0f4ff;
-    border-radius: 6px;
-    text-decoration: none;
-}
+    .sidebar-urls {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .sidebar-url-item {
+        display: block;
+        padding: 0.875rem;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        backdrop-filter: blur(10px);
+    }
+    
+    .sidebar-url-item:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateX(5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .short-code-badge {
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 0.85rem;
+        font-family: 'Courier New', monospace;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .click-count {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+    
+    .url-text {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 0.8rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: 0.5rem;
+        padding-left: 0.25rem;
+    }
+    
+    .expiry-text {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.7rem;
+        margin-top: 0.5rem;
+        padding-left: 0.25rem;
+    }
+    
+    .sidebar-list::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .sidebar-list::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+    }
+    
+    .sidebar-list::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+    }
+    
+    .sidebar-list::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
 </style> 

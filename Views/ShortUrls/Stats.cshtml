@@ -4,95 +4,243 @@
     ViewData["Title"] = "URL Stats";
 }
 
-<div class="container mt-5">
+<div class="container mt-5 pb-5">
+    <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold" style="color: white; text-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+            <i class="fas fa-chart-line me-3"></i>URL Statistics
+        </h2>
+        <p class="text-white-50" style="font-size: 1.1rem;">Detailed analytics for your short link</p>
+    </div>
+    
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="mb-0">URL Statistics</h3>
+        <div class="col-md-10">
+            <!-- Stats Cards Row -->
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-lg border-0 text-center hover-lift">
+                        <div class="card-body p-4">
+                            <i class="fas fa-mouse-pointer fa-3x mb-3 gradient-text"></i>
+                            <h6 class="text-muted text-uppercase small">Total Clicks</h6>
+                            <h2 class="stats-value mb-0">@Model.Clicks.Count</h2>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-lg border-0 text-center hover-lift">
+                        <div class="card-body p-4">
+                            <i class="fas fa-calendar-plus fa-3x mb-3 gradient-text"></i>
+                            <h6 class="text-muted text-uppercase small">Created</h6>
+                            <p class="mb-0 fw-bold" style="font-size: 1.1rem;">@Model.CreatedAt.ToString("MMM dd, yyyy")</p>
+                            <small class="text-muted">@Model.CreatedAt.ToString("hh:mm tt")</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-lg border-0 text-center hover-lift">
+                        <div class="card-body p-4">
+                            @if (Model.ExpiresAt.HasValue)
+                            {
+                                <i class="fas fa-hourglass-half fa-3x mb-3 gradient-text"></i>
+                                <h6 class="text-muted text-uppercase small">Expires</h6>
+                                <p class="mb-0 fw-bold" style="font-size: 1.1rem;">@Model.ExpiresAt.Value.ToString("MMM dd, yyyy")</p>
+                                <small class="text-muted">@Model.ExpiresAt.Value.ToString("hh:mm tt")</small>
+                            }
+                            else
+                            {
+                                <i class="fas fa-infinity fa-3x mb-3 gradient-text"></i>
+                                <h6 class="text-muted text-uppercase small">Expires</h6>
+                                <p class="mb-0 fw-bold" style="font-size: 1.1rem; color: #667eea;">Never</p>
+                                <small class="text-muted">Permanent link</small>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- URL Information Card -->
+            <div class="card shadow-lg border-0 mb-4 hover-lift">
+                <div class="card-header bg-white border-0 pt-4 pb-3">
+                    <h4 class="mb-0 gradient-text">
+                        <i class="fas fa-link me-2"></i>Link Information
+                    </h4>
+                </div>
+                <div class="card-body p-4">
                     <div class="mb-4">
-                        <label class="form-label">Original URL:</label>
-                        <div class="input-group">
+                        <label class="form-label fw-bold d-flex align-items-center mb-3">
+                            <i class="fas fa-globe me-2 text-primary"></i>
+                            <span>Original URL:</span>
+                        </label>
+                        <div class="input-group shadow-sm">
                             <input type="text" class="form-control" value="@Model.OriginalUrl" readonly>
-                            <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard(this.previousElementSibling)">
+                            <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard(this.previousElementSibling)" title="Copy to clipboard">
                                 <i class="fas fa-copy"></i>
                             </button>
                         </div>
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label">Short URL:</label>
-                        <div class="input-group">
+                        <label class="form-label fw-bold d-flex align-items-center mb-3">
+                            <i class="fas fa-compress-alt me-2 text-success"></i>
+                            <span>Short URL:</span>
+                        </label>
+                        <div class="input-group shadow-sm">
                             <input type="text" class="form-control" value="@($"{Context.Request.Scheme}://{Context.Request.Host}/{Model.ShortCode}")" readonly>
-                            <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard(this.previousElementSibling)">
+                            <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard(this.previousElementSibling)" title="Copy to clipboard">
                                 <i class="fas fa-copy"></i>
                             </button>
                         </div>
+                        <small class="text-muted d-block mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Short Code: <span class="fw-bold">@Model.ShortCode</span>
+                        </small>
                     </div>
+                </div>
+            </div>
 
-                    <div class="mb-4">
-                        <label class="form-label">Total Clicks:</label>
-                        <h4>@Model.Clicks.Count</h4>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label">Created:</label>
-                        <p>@Model.CreatedAt.ToString("g")</p>
-                    </div>
-
-                    @if (Model.ExpiresAt.HasValue)
+            <!-- Recent Clicks Card -->
+            <div class="card shadow-lg border-0 hover-lift">
+                <div class="card-header bg-white border-0 pt-4 pb-3">
+                    <h4 class="mb-0 gradient-text">
+                        <i class="fas fa-history me-2"></i>Recent Clicks
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (Model.Clicks.Any())
                     {
-                        <div class="mb-4">
-                            <label class="form-label">Expires:</label>
-                            <p>@Model.ExpiresAt.Value.ToString("g")</p>
-                        </div>
-                    }
-
-                    <div class="mb-4">
-                        <h4>Recent Clicks</h4>
-                        @if (Model.Clicks.Any())
-                        {
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
+                        <div class="table-responsive">
+                            <table class="table table-hover clicks-table">
+                                <thead>
+                                    <tr>
+                                        <th><i class="fas fa-clock me-2"></i>Time</th>
+                                        <th><i class="fas fa-network-wired me-2"></i>IP Address</th>
+                                        <th><i class="fas fa-desktop me-2"></i>User Agent</th>
+                                        <th><i class="fas fa-external-link-alt me-2"></i>Referrer</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var click in Model.Clicks.OrderByDescending(c => c.At).Take(10))
+                                    {
                                         <tr>
-                                            <th>Time</th>
-                                            <th>IP Address</th>
-                                            <th>User Agent</th>
-                                            <th>Referrer</th>
+                                            <td>
+                                                <div class="fw-bold text-dark" style="font-size: 0.95rem;">@click.At.ToString("MMM dd, yyyy")</div>
+                                                <small style="color: #64748b;">@click.At.ToString("hh:mm:ss tt")</small>
+                                            </td>
+                                            <td>
+                                                <span class="ip-badge">@click.Ip</span>
+                                            </td>
+                                            <td>
+                                                <small style="color: #475569; line-height: 1.4;">@(click.Agent.Length > 50 ? click.Agent.Substring(0, 50) + "..." : click.Agent)</small>
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(click.Referer))
+                                                {
+                                                    <small style="color: #6366f1; font-weight: 500;">@(click.Referer.Length > 40 ? click.Referer.Substring(0, 40) + "..." : click.Referer)</small>
+                                                }
+                                                else
+                                                {
+                                                    <span style="color: #94a3b8;">-</span>
+                                                }
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var click in Model.Clicks.OrderByDescending(c => c.At).Take(10))
-                                        {
-                                            <tr>
-                                                <td>@click.At.ToString("g")</td>
-                                                <td>@click.Ip</td>
-                                                <td>@click.Agent</td>
-                                                <td>@(string.IsNullOrEmpty(click.Referer) ? "-" : click.Referer)</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @if (Model.Clicks.Count > 10)
+                        {
+                            <div class="alert alert-info mt-3 mb-0" role="alert">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Showing latest 10 of <strong>@Model.Clicks.Count</strong> total clicks
                             </div>
                         }
-                        else
-                        {
-                            <p class="text-muted">No clicks recorded yet.</p>
-                        }
-                    </div>
-
-                    <div class="d-flex justify-content-between">
-                        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-chart-line fa-4x text-muted mb-3" style="opacity: 0.3;"></i>
+                            <p class="text-muted mb-0">No clicks recorded yet.</p>
+                            <small class="text-muted">Share your link to start tracking clicks!</small>
+                        </div>
+                    }
                 </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-action="Index" class="btn btn-secondary px-4 py-2">
+                    <i class="fas fa-arrow-left me-2"></i>Back to List
+                </a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary px-4 py-2">
+                    <i class="fas fa-edit me-2"></i>Edit
+                </a>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .clicks-table {
+        background: white !important;
+        border-radius: 12px;
+        overflow: visible;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .clicks-table thead {
+        background: var(--primary-gradient) !important;
+    }
+    
+    .clicks-table thead tr {
+        background: transparent !important;
+    }
+    
+    .clicks-table thead th {
+        color: white !important;
+        font-weight: 600 !important;
+        text-transform: uppercase;
+        font-size: 0.8rem !important;
+        letter-spacing: 0.5px;
+        border: none !important;
+        padding: 1.2rem 1rem !important;
+        background: transparent !important;
+    }
+    
+    .clicks-table tbody td {
+        padding: 1.2rem 1rem;
+        vertical-align: middle;
+        border-color: rgba(0, 0, 0, 0.05);
+        background: white;
+    }
+    
+    .clicks-table tbody tr {
+        transition: all 0.2s ease;
+        background: white;
+    }
+    
+    .clicks-table tbody tr:hover {
+        background: rgba(99, 102, 241, 0.03) !important;
+        transform: scale(1.005);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .ip-badge {
+        display: inline-block;
+        padding: 0.4rem 0.9rem;
+        background: var(--primary-gradient);
+        color: white;
+        border-radius: 8px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    }
+</style>
 
 @section Scripts {
     <script src="https://kit.fontawesome.com/4ad8d6e2b2.js" crossorigin="anonymous"></script>

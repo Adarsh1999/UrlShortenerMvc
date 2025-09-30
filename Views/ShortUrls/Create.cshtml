@@ -4,39 +4,75 @@
     ViewData["Title"] = "Create Short URL";
 }
 
-<div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 80vh;">
-    <div class="col-md-7 col-lg-6">
-        <div class="card shadow-lg border-0">
-            <div class="card-header bg-white border-0 pb-0">
-                <h2 class="display-6 fw-bold text-center mb-0">Create Short URL</h2>
+<div class="container d-flex flex-column align-items-center justify-content-center px-3" style="min-height: 80vh;">
+    <div class="col-md-9 col-lg-7 col-xl-6">
+        <div class="text-center mb-5">
+            <div class="mb-4">
+                <div class="d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); box-shadow: 0 8px 32px rgba(0,0,0,0.2);">
+                    <i class="fas fa-compress-alt fa-2x text-white"></i>
+                </div>
             </div>
-            <div class="card-body p-4">
+            <h2 class="display-5 fw-bold mb-3" style="color: white; text-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                Create Short URL
+            </h2>
+            <p style="color: rgba(255,255,255,0.9); font-size: 1.15rem;">Transform your long URLs into short, shareable links</p>
+        </div>
+        
+        <div class="card shadow-lg border-0 hover-lift">
+            <div class="card-body p-5">
                 <form asp-action="Create" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4" role="alert"></div>
 
                     <div class="mb-4">
-                        <label asp-for="Url" class="form-label">Enter URL to shorten</label>
-                        <div class="input-group">
-                            <input asp-for="Url" class="form-control form-control-lg" placeholder="https://example.com/very/long/url" />
+                        <label asp-for="Url" class="form-label d-flex align-items-center">
+                            <i class="fas fa-link me-2 gradient-text"></i>
+                            <span>Enter URL to shorten</span>
+                        </label>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text bg-white border-end-0" style="border-right: none;">
+                                <i class="fas fa-globe text-muted"></i>
+                            </span>
+                            <input asp-for="Url" class="form-control form-control-lg border-start-0 ps-0" 
+                                   placeholder="https://example.com/very/long/url" 
+                                   style="border-left: none;" />
                         </div>
-                        <span asp-validation-for="Url" class="text-danger"></span>
+                        <span asp-validation-for="Url" class="text-danger d-block mt-2"></span>
                     </div>
 
-                    <div class="mb-4">
-                        <label asp-for="ExpiresAt" class="form-label">Expiry Date (Optional)</label>
+                    <div class="mb-5">
+                        <label asp-for="ExpiresAt" class="form-label d-flex align-items-center">
+                            <i class="fas fa-calendar-alt me-2 gradient-text"></i>
+                            <span>Expiry Date (Optional)</span>
+                        </label>
                         <div class="input-group">
-                            <input asp-for="ExpiresAt" class="form-control" type="datetime-local" />
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="fas fa-clock text-muted"></i>
+                            </span>
+                            <input asp-for="ExpiresAt" class="form-control border-start-0 ps-0" 
+                                   type="datetime-local" 
+                                   style="border-left: none;" />
                         </div>
-                        <span asp-validation-for="ExpiresAt" class="text-danger"></span>
+                        <span asp-validation-for="ExpiresAt" class="text-danger d-block mt-2"></span>
+                        <small class="text-muted d-block mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Leave empty for permanent links
+                        </small>
                     </div>
 
                     <div class="d-grid mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="fas fa-link me-2"></i>Shorten URL
+                        <button type="submit" class="btn btn-primary btn-lg py-3">
+                            <i class="fas fa-compress-alt me-2"></i>Shorten URL
                         </button>
                     </div>
                 </form>
             </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <p class="text-white-50">
+                <i class="fas fa-shield-alt me-2"></i>
+                Your URLs are secure and tracked with advanced analytics
+            </p>
         </div>
     </div>
 </div>
